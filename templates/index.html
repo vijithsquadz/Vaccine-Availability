@@ -1,0 +1,63 @@
+<html>
+    <div>
+        <h1 style="text-align:center">Covid Vaccine Availability in Kerala</h1>
+    </div>
+    <div style="text-align:center">
+        <label style="font-family:verdana; font-size:16px;">District: </label>
+        <select id="districts">
+             <option value="Alappuzha">Alappuzha</option>
+             <option value="Ernakulam">Ernakulam</option>
+             <option value="Idukki">Idukki</option>
+             <option value="Kannur">Kannur</option>
+             <option value="Kasaragod">Kasaragod</option>
+             <option value="Kollam">Kollam</option>
+             <option value="Kottayam">Kottayam</option>
+             <option value="Kozhikode">Kozhikode</option>
+             <option value="Malappuram">Malappuram</option>
+             <option value="Palakkad">Palakkad</option>
+             <option value="Pathanamthitta">Pathanamthitta</option>
+             <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+             <option value="Thrissur">Thrissur</option>
+             <option value="Wayanad">Wayanad</option>     
+        </select>     
+        <br><br>   
+        <label style="font-family:verdana; font-size:16px;">Dose: </label>
+        <input type="radio" id="all" name="dose" value="all" checked="true">All</input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="dose1" name="dose" value="dose1">Dose-1</input>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" id="dose2" name="dose" value="dose2">Dose-2</input>
+        <br><br>
+        <button type="button" onclick="send_request()">Show Availability</button><br><br>        
+        <div id="result">
+        </div>
+    </div>
+    <script>
+        function get_checked(){
+            var doses = document.getElementsByName("dose");
+            var retval = "all"
+            for (var i = 0; i < doses.length; i++) {
+                if (doses[i].checked){
+                    retval = doses[i].value;
+                    break;
+                }
+            }
+            return retval
+        }            
+        function send_request() {
+            document.getElementById("result").innerHTML = ""
+            var district = document.getElementById("districts").value;
+            var dose = get_checked()
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("result").innerHTML = this.responseText
+                }
+            };
+            xhttp.open("POST", 
+                        "http://ec2-13-127-173-12.ap-south-1.compute.amazonaws.com/get_availability",
+                        true);
+            xhttp.setRequestHeader("Content-type", "application/json");
+            var data = JSON.stringify({ "district": district, "dose" : dose});
+            xhttp.send(data);
+        }
+    </script>
+</html>
