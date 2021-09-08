@@ -53,7 +53,7 @@
                 }
             };
             xhttp.open("POST", 
-                        "http://ec2-13-127-173-12.ap-south-1.compute.amazonaws.com/get_availability",
+                        "http://localhost:5000/get_availability",
                         true);
             xhttp.setRequestHeader("Content-type", "application/json");
             var data = JSON.stringify({ "district": district, "dose" : dose});
